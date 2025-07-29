@@ -1,346 +1,191 @@
-# MRT Portfolio Website
+# MRT Test Automation Advisor Portfolio
 
-A modern, responsive personal portfolio website built with React, Node.js, Express, and PostgreSQL. Features a clean design, admin panel, blog functionality, and contact form.
+A modern, full-stack personal portfolio website showcasing expertise in test automation and quality assurance.
 
 ## 🚀 Features
 
-### Frontend (React + Vite)
-- **Modern UI/UX**: Clean, responsive design with dark/light theme support
-- **Performance Optimized**: Code splitting, lazy loading, and optimized builds
-- **Animations**: Smooth animations using Framer Motion
-- **SEO Optimized**: Meta tags, Open Graph, and structured data
-- **Accessibility**: ARIA labels, keyboard navigation, and screen reader support
-
-### Backend (Node.js + Express)
-- **RESTful API**: Complete CRUD operations for all content
-- **Authentication**: JWT-based admin authentication
-- **Security**: Rate limiting, input validation, CORS, and Helmet
-- **Database**: PostgreSQL with connection pooling
-- **File Upload**: Image upload and processing
-- **Email Integration**: Contact form email notifications
-
-### Content Management
-- **Admin Panel**: Easy-to-use interface for managing content
-- **Blog System**: Markdown support with tags and categories
-- **Project Management**: Add, edit, and organize projects
-- **Resume Builder**: Manage skills, experience, and education
-- **Contact Management**: View and respond to contact messages
+- **Modern UI/UX**: Futuristic design with neon accents and smooth animations
+- **Responsive Design**: Optimized for all devices and screen sizes
+- **Full-Stack Architecture**: React frontend with Node.js/Express backend
+- **Database Integration**: SQLite database with sample data
+- **Real-time Updates**: Hot module replacement for development
+- **SEO Optimized**: Meta tags and structured content
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18** - UI library
-- **Vite** - Build tool and dev server
-- **Tailwind CSS** - Styling framework
-- **Framer Motion** - Animations
+- **React 18** - Modern UI library
+- **Vite** - Fast build tool and dev server
+- **Tailwind CSS** - Utility-first CSS framework
+- **Framer Motion** - Animation library
 - **React Query** - Data fetching and caching
 - **React Router** - Client-side routing
-- **React Hook Form** - Form handling
-- **Lucide React** - Icons
+- **Axios** - HTTP client
 
 ### Backend
-- **Node.js** - Runtime environment
-- **Express** - Web framework
-- **PostgreSQL** - Database
-- **JWT** - Authentication
-- **bcryptjs** - Password hashing
-- **Nodemailer** - Email sending
-- **Multer** - File uploads
-- **Sharp** - Image processing
-
-### Development Tools
-- **ESLint** - Code linting
-- **Vitest** - Testing framework
-- **React Testing Library** - Component testing
-- **Prettier** - Code formatting
-
-## 📋 Prerequisites
-
-Before you begin, ensure you have the following installed:
-- **Node.js** (v16 or higher)
-- **npm** or **yarn**
-- **PostgreSQL** (v12 or higher)
-- **Git**
-
-## 🚀 Quick Start
-
-### 1. Clone the Repository
-
-```bash
-git clone <repository-url>
-cd MrtDgrmnciApp
-```
-
-### 2. Install Dependencies
-
-```bash
-# Install root dependencies
-npm install
-
-# Install all dependencies (frontend + backend)
-npm run install-all
-```
-
-### 3. Database Setup
-
-1. **Create PostgreSQL Database**
-   ```sql
-   CREATE DATABASE portfolio_db;
-   CREATE USER portfolio_user WITH PASSWORD 'your_password';
-   GRANT ALL PRIVILEGES ON DATABASE portfolio_db TO portfolio_user;
-   ```
-
-2. **Configure Environment Variables**
-   ```bash
-   cd backend
-   cp env.example .env
-   ```
-   
-   Edit `.env` with your database credentials:
-   ```env
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_NAME=portfolio_db
-   DB_USER=portfolio_user
-   DB_PASSWORD=your_password
-   JWT_SECRET=your_jwt_secret_key_here
-   ```
-
-3. **Run Database Migrations**
-   ```bash
-   cd backend
-   npm run db:migrate
-   npm run db:seed
-   ```
-
-### 4. Start Development Servers
-
-```bash
-# Start both frontend and backend
-npm run dev
-
-# Or start them separately
-npm run server  # Backend on http://localhost:5000
-npm run client  # Frontend on http://localhost:3000
-```
-
-### 5. Access the Application
-
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000
-- **Admin Panel**: http://localhost:3000/admin
-- **Default Admin Credentials**: 
-  - Username: `admin`
-  - Password: `admin123`
+- **Node.js** - JavaScript runtime
+- **Express.js** - Web framework
+- **SQLite** - Lightweight database
+- **Nodemon** - Development server with auto-restart
+- **CORS** - Cross-origin resource sharing
 
 ## 📁 Project Structure
 
 ```
 MrtDgrmnciApp/
-├── backend/                 # Backend API
+├── backend/                 # Backend server
 │   ├── config/             # Database configuration
-│   ├── routes/             # API routes
-│   ├── scripts/            # Database scripts
-│   ├── uploads/            # File uploads
+│   ├── routes/             # API endpoints
+│   ├── scripts/            # Database migration and seeding
 │   ├── server.js           # Main server file
-│   └── package.json
+│   └── package.json        # Backend dependencies
 ├── frontend/               # React frontend
-│   ├── public/             # Static assets
 │   ├── src/
-│   │   ├── components/     # Reusable components
+│   │   ├── components/     # Reusable UI components
 │   │   ├── pages/          # Page components
 │   │   ├── services/       # API services
-│   │   ├── hooks/          # Custom hooks
-│   │   ├── utils/          # Utility functions
 │   │   ├── App.jsx         # Main app component
 │   │   └── main.jsx        # Entry point
-│   └── package.json
-├── package.json            # Root package.json
-└── README.md
+│   ├── index.html          # HTML template
+│   └── package.json        # Frontend dependencies
+├── package.json            # Root package.json with scripts
+└── README.md              # This file
 ```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** (v18 or higher)
+- **npm** (v8 or higher)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd MrtDgrmnciApp
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm run install-all
+   ```
+
+3. **Set up the database**
+   ```bash
+   cd backend
+   node scripts/migrate.js
+   node scripts/seed.js
+   cd ..
+   ```
+
+4. **Start the development servers**
+   ```bash
+   npm run dev
+   ```
+
+### Available Scripts
+
+- `npm run dev` - Start both frontend and backend in development mode
+- `npm run server` - Start only the backend server
+- `npm run client` - Start only the frontend development server
+- `npm run build` - Build the frontend for production
+- `npm run install-all` - Install dependencies for all packages
+- `npm start` - Start the production server
+
+## 🌐 Access Points
+
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:5000
+- **Health Check**: http://localhost:5000/api/health
+
+## 📊 Database Schema
+
+The application uses SQLite with the following tables:
+
+- **users** - User authentication and profiles
+- **projects** - Portfolio projects with technologies
+- **skills** - Technical skills and proficiency levels
+- **experience** - Work experience and history
+- **education** - Educational background
+- **blog_posts** - Blog articles and content
+- **contact_messages** - Contact form submissions
+
+## 🎨 Customization
+
+### Content Updates
+
+1. **Projects**: Edit `backend/scripts/seed.js` to update project data
+2. **Skills**: Modify the skills array in the seed script
+3. **Experience**: Update work experience in the seed script
+4. **Styling**: Customize Tailwind classes in component files
+
+### Theme Customization
+
+The project uses a futuristic theme with:
+- Neon blue, cyan, purple, and pink accents
+- Dark backgrounds with glassmorphism effects
+- Custom fonts (Orbitron, Inter, Fira Code)
+- Smooth animations and transitions
 
 ## 🔧 Configuration
 
 ### Environment Variables
 
-#### Backend (.env)
+Create a `.env` file in the backend directory:
+
 ```env
-# Server Configuration
 PORT=5000
 NODE_ENV=development
-
-# Database Configuration
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=portfolio_db
-DB_USER=postgres
-DB_PASSWORD=your_password
-
-# JWT Configuration
-JWT_SECRET=your_jwt_secret_key_here
-JWT_EXPIRES_IN=7d
-
-# Email Configuration
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_app_password
-
-# File Upload Configuration
-UPLOAD_PATH=./uploads
-MAX_FILE_SIZE=5242880
-
-# Rate Limiting
-RATE_LIMIT_WINDOW_MS=900000
-RATE_LIMIT_MAX_REQUESTS=100
 ```
 
-### Frontend Configuration
+### Database Configuration
 
-Update social links and personal information in:
-- `frontend/src/components/Footer.jsx`
-- `frontend/index.html` (meta tags)
+The SQLite database is automatically created in the root directory as `portfolio.db`.
+
+## 📱 Pages
+
+1. **Home** - Hero section with introduction and stats
+2. **Projects** - Showcase of automation projects and frameworks
+3. **Resume** - Professional experience and skills
+4. **Blog** - Articles about test automation and QA
+5. **Contact** - Contact form and information
+6. **Admin** - Admin panel for content management
 
 ## 🧪 Testing
 
-```bash
-# Run all tests
-npm test
+The portfolio showcases expertise in:
+- **Selenium** - Web automation framework
+- **Cypress** - End-to-end testing
+- **Playwright** - Modern browser automation
+- **Python/JavaScript** - Programming languages
+- **Jenkins** - CI/CD pipelines
+- **Docker** - Containerization
 
-# Run frontend tests only
-cd frontend && npm test
+## 📈 Performance
 
-# Run backend tests only
-cd backend && npm test
-
-# Run tests with coverage
-npm run test:coverage
-```
-
-## 🏗️ Building for Production
-
-### Frontend Build
-```bash
-cd frontend
-npm run build
-```
-
-### Backend Build
-```bash
-cd backend
-npm start
-```
-
-## 🚀 Deployment
-
-### Frontend Deployment (Vercel/Netlify)
-
-1. **Build the project**
-   ```bash
-   cd frontend
-   npm run build
-   ```
-
-2. **Deploy to Vercel**
-   ```bash
-   npm install -g vercel
-   vercel
-   ```
-
-3. **Deploy to Netlify**
-   - Connect your repository
-   - Build command: `cd frontend && npm run build`
-   - Publish directory: `frontend/dist`
-
-### Backend Deployment (Heroku/Render)
-
-1. **Prepare for deployment**
-   ```bash
-   cd backend
-   npm install --production
-   ```
-
-2. **Set environment variables** in your hosting platform
-
-3. **Deploy to Heroku**
-   ```bash
-   heroku create your-app-name
-   heroku config:set NODE_ENV=production
-   git push heroku main
-   ```
-
-4. **Deploy to Render**
-   - Connect your repository
-   - Build command: `npm install`
-   - Start command: `npm start`
-
-### Database Deployment
-
-- **Production Database**: Use managed PostgreSQL services like:
-  - Heroku Postgres
-  - AWS RDS
-  - DigitalOcean Managed Databases
-  - Supabase
-
-## 🔒 Security Features
-
-- **JWT Authentication** for admin access
-- **Rate Limiting** to prevent abuse
-- **Input Validation** using express-validator
-- **CORS Configuration** for cross-origin requests
-- **Helmet** for security headers
-- **bcrypt** for password hashing
-- **SQL Injection Protection** with parameterized queries
-
-## 📱 Responsive Design
-
-The website is fully responsive and optimized for:
-- Desktop (1200px+)
-- Tablet (768px - 1199px)
-- Mobile (320px - 767px)
-
-## 🎨 Customization
-
-### Colors and Themes
-Edit `frontend/tailwind.config.js` to customize:
-- Color palette
-- Typography
-- Animations
-- Spacing
-
-### Content
-- Update personal information in components
-- Modify sample data in `backend/scripts/seed.js`
-- Customize email templates
+- **Lighthouse Score**: Optimized for performance, accessibility, and SEO
+- **Bundle Size**: Minimized with Vite's tree-shaking
+- **Loading Speed**: Fast initial load with code splitting
+- **SEO**: Meta tags, structured data, and semantic HTML
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
-## 🆘 Support
+## 👨‍💻 Author
 
-If you encounter any issues:
-
-1. Check the [Issues](../../issues) page
-2. Create a new issue with detailed information
-3. Include error messages and steps to reproduce
-
-## 🙏 Acknowledgments
-
-- [React](https://reactjs.org/) - UI library
-- [Tailwind CSS](https://tailwindcss.com/) - CSS framework
-- [Framer Motion](https://www.framer.com/motion/) - Animation library
-- [Express](https://expressjs.com/) - Web framework
-- [PostgreSQL](https://www.postgresql.org/) - Database
+**MRT** - Test Automation Advisor
 
 ---
 
-**Built with ❤️ by MRT** 
+*Built with ❤️ for the QA community* 
