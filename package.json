@@ -1,0 +1,21 @@
+{
+  "name": "mrt-portfolio",
+  "version": "1.0.0",
+  "description": "Modern Personal Portfolio Website",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "test": "concurrently \"cd backend && npm test\" \"cd frontend && npm test\"",
+    "start": "cd backend && npm start"
+  },
+  "keywords": ["portfolio", "react", "nodejs", "express", "postgresql"],
+  "author": "MRT",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 
