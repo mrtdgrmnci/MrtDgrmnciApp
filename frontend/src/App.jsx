@@ -8,6 +8,7 @@ import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
 import Contact from './pages/Contact'
 import Admin from './pages/Admin'
+import AdminLogin from './pages/AdminLogin'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -26,9 +27,10 @@ function App() {
           <Route path="blog" element={<Blog />} />
           <Route path="blog/:slug" element={<BlogPost />} />
           <Route path="contact" element={<Contact />} />
-          <Route path="admin/*" element={<Admin />} />
+          <Route path="admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Route>
+        <Route path="/admin/login" element={<AdminLogin />} />
       </Routes>
     </>
   )
