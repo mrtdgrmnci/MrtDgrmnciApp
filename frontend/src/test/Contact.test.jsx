@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
 import Contact from '../pages/Contact'
@@ -33,12 +33,16 @@ describe('Contact Component', () => {
     
     render(<Contact />)
     
-    await user.type(screen.getByLabelText('Your Name'), 'John Doe')
-    await user.type(screen.getByLabelText('Your Email'), 'john@example.com')
-    await user.type(screen.getByLabelText('Subject'), 'Test Subject')
-    await user.type(screen.getByLabelText('Your Message'), 'This is a test message.')
+    await act(async () => {
+      await user.type(screen.getByLabelText('Your Name'), 'John Doe')
+      await user.type(screen.getByLabelText('Your Email'), 'john@example.com')
+      await user.type(screen.getByLabelText('Subject'), 'Test Subject')
+      await user.type(screen.getByLabelText('Your Message'), 'This is a test message.')
+    })
     
-    await user.click(screen.getByRole('button', { name: 'Send Message' }))
+    await act(async () => {
+      await user.click(screen.getByRole('button', { name: 'Send Message' }))
+    })
     
     await waitFor(() => {
       expect(contactAPI.submit).toHaveBeenCalledWith({
@@ -60,11 +64,15 @@ describe('Contact Component', () => {
     
     render(<Contact />)
     
-    await user.type(screen.getByLabelText('Your Name'), 'John Doe')
-    await user.type(screen.getByLabelText('Your Email'), 'john@example.com')
-    await user.type(screen.getByLabelText('Your Message'), 'This is a test message.')
+    await act(async () => {
+      await user.type(screen.getByLabelText('Your Name'), 'John Doe')
+      await user.type(screen.getByLabelText('Your Email'), 'john@example.com')
+      await user.type(screen.getByLabelText('Your Message'), 'This is a test message.')
+    })
     
-    await user.click(screen.getByRole('button', { name: 'Send Message' }))
+    await act(async () => {
+      await user.click(screen.getByRole('button', { name: 'Send Message' }))
+    })
     
     expect(screen.getByRole('button', { name: 'Sending...' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Sending...' })).toBeDisabled()
@@ -76,11 +84,15 @@ describe('Contact Component', () => {
     
     render(<Contact />)
     
-    await user.type(screen.getByLabelText('Your Name'), 'John Doe')
-    await user.type(screen.getByLabelText('Your Email'), 'john@example.com')
-    await user.type(screen.getByLabelText('Your Message'), 'This is a test message.')
+    await act(async () => {
+      await user.type(screen.getByLabelText('Your Name'), 'John Doe')
+      await user.type(screen.getByLabelText('Your Email'), 'john@example.com')
+      await user.type(screen.getByLabelText('Your Message'), 'This is a test message.')
+    })
     
-    await user.click(screen.getByRole('button', { name: 'Send Message' }))
+    await act(async () => {
+      await user.click(screen.getByRole('button', { name: 'Send Message' }))
+    })
     
     await waitFor(() => {
       expect(screen.getByText('❌ Error sending message. Please try again or contact me directly.')).toBeInTheDocument()
@@ -97,11 +109,15 @@ describe('Contact Component', () => {
     const emailInput = screen.getByLabelText('Your Email')
     const messageInput = screen.getByLabelText('Your Message')
     
-    await user.type(nameInput, 'John Doe')
-    await user.type(emailInput, 'john@example.com')
-    await user.type(messageInput, 'This is a test message.')
+    await act(async () => {
+      await user.type(nameInput, 'John Doe')
+      await user.type(emailInput, 'john@example.com')
+      await user.type(messageInput, 'This is a test message.')
+    })
     
-    await user.click(screen.getByRole('button', { name: 'Send Message' }))
+    await act(async () => {
+      await user.click(screen.getByRole('button', { name: 'Send Message' }))
+    })
     
     await waitFor(() => {
       expect(nameInput.value).toBe('')
@@ -115,8 +131,10 @@ describe('Contact Component', () => {
     
     render(<Contact />)
     
-    await user.type(screen.getByLabelText('Your Email'), 'john@example.com')
-    await user.type(screen.getByLabelText('Your Message'), 'This is a test message.')
+    await act(async () => {
+      await user.type(screen.getByLabelText('Your Email'), 'john@example.com')
+      await user.type(screen.getByLabelText('Your Message'), 'This is a test message.')
+    })
     
     const submitButton = screen.getByRole('button', { name: 'Send Message' })
     expect(submitButton).toBeDisabled()
@@ -127,8 +145,10 @@ describe('Contact Component', () => {
     
     render(<Contact />)
     
-    await user.type(screen.getByLabelText('Your Name'), 'John Doe')
-    await user.type(screen.getByLabelText('Your Message'), 'This is a test message.')
+    await act(async () => {
+      await user.type(screen.getByLabelText('Your Name'), 'John Doe')
+      await user.type(screen.getByLabelText('Your Message'), 'This is a test message.')
+    })
     
     const submitButton = screen.getByRole('button', { name: 'Send Message' })
     expect(submitButton).toBeDisabled()
@@ -139,11 +159,28 @@ describe('Contact Component', () => {
     
     render(<Contact />)
     
-    await user.type(screen.getByLabelText('Your Name'), 'John Doe')
-    await user.type(screen.getByLabelText('Your Email'), 'john@example.com')
+    await act(async () => {
+      await user.type(screen.getByLabelText('Your Name'), 'John Doe')
+      await user.type(screen.getByLabelText('Your Email'), 'john@example.com')
+    })
     
     const submitButton = screen.getByRole('button', { name: 'Send Message' })
     expect(submitButton).toBeDisabled()
+  })
+
+  it('enables submit button when all required fields are filled', async () => {
+    const user = userEvent.setup()
+    
+    render(<Contact />)
+    
+    await act(async () => {
+      await user.type(screen.getByLabelText('Your Name'), 'John Doe')
+      await user.type(screen.getByLabelText('Your Email'), 'john@example.com')
+      await user.type(screen.getByLabelText('Your Message'), 'This is a test message.')
+    })
+    
+    const submitButton = screen.getByRole('button', { name: 'Send Message' })
+    expect(submitButton).not.toBeDisabled()
   })
 
   it('displays contact information', () => {
@@ -152,5 +189,28 @@ describe('Contact Component', () => {
     expect(screen.getByText('Or contact me directly:')).toBeInTheDocument()
     expect(screen.getByText('mrtdgrmnci@gmail.com')).toBeInTheDocument()
     expect(screen.getByText('+1 (202) 567-9551')).toBeInTheDocument()
+  })
+
+  it('handles form input changes correctly', async () => {
+    const user = userEvent.setup()
+    
+    render(<Contact />)
+    
+    const nameInput = screen.getByLabelText('Your Name')
+    const emailInput = screen.getByLabelText('Your Email')
+    const subjectInput = screen.getByLabelText('Subject')
+    const messageInput = screen.getByLabelText('Your Message')
+    
+    await act(async () => {
+      await user.type(nameInput, 'John')
+      await user.type(emailInput, 'john@')
+      await user.type(subjectInput, 'Test')
+      await user.type(messageInput, 'Hello')
+    })
+    
+    expect(nameInput.value).toBe('John')
+    expect(emailInput.value).toBe('john@')
+    expect(subjectInput.value).toBe('Test')
+    expect(messageInput.value).toBe('Hello')
   })
 }) 
