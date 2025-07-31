@@ -33,7 +33,9 @@ api.interceptors.response.use(
 )
 
 export const authAPI = {
+  login: (credentials) => api.post('/auth/login', credentials),
   logout: () => api.post('/auth/logout'),
+  getProfile: () => api.get('/auth/profile'),
 }
 
 export const projectsAPI = {
@@ -48,6 +50,7 @@ export const projectsAPI = {
       throw error
     }
   },
+  getById: (id) => api.get(`/projects/${id}`),
   delete: (id) => api.delete(`/projects/${id}`),
 }
 
