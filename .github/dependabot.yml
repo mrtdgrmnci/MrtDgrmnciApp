@@ -16,6 +16,8 @@ updates:
     labels:
       - "dependencies"
       - "npm"
+    # Auto-delete branches after merging
+    delete-branch-after-merge: true
 
   # Enable version updates for npm in backend
   - package-ecosystem: "npm"
@@ -34,6 +36,8 @@ updates:
       - "dependencies"
       - "npm"
       - "backend"
+    # Auto-delete branches after merging
+    delete-branch-after-merge: true
 
   # Enable version updates for npm in frontend
   - package-ecosystem: "npm"
@@ -52,6 +56,8 @@ updates:
       - "dependencies"
       - "npm"
       - "frontend"
+    # Auto-delete branches after merging
+    delete-branch-after-merge: true
 
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
@@ -69,6 +75,8 @@ updates:
     labels:
       - "dependencies"
       - "github-actions"
+    # Auto-delete branches after merging
+    delete-branch-after-merge: true
 
   # Enable version updates for Docker
   - package-ecosystem: "docker"
@@ -85,4 +93,6 @@ updates:
       include: "scope"
     labels:
       - "dependencies"
-      - "docker" 
+      - "docker"
+    # Auto-delete branches after merging
+    delete-branch-after-merge: true 

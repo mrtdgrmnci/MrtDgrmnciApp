@@ -40,7 +40,7 @@ jobs:
       run: npm run test:coverage
       
     - name: Upload backend coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
       with:
         file: ./backend/coverage/lcov.info
         flags: backend
@@ -76,7 +76,7 @@ jobs:
       run: npm run test:coverage
       
     - name: Upload frontend coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
       with:
         file: ./frontend/coverage/lcov.info
         flags: frontend
@@ -187,7 +187,7 @@ jobs:
       uses: docker/setup-buildx-action@v3
       
     - name: Build and push Docker image
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: .
         push: false
