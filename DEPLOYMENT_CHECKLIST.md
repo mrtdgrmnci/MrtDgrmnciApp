@@ -11,7 +11,7 @@
 
 ## 🚂 Railway Setup (Backend)
 
-- [ ] **Railway Token**: `_________________`
+- [x] **Railway Token**: `ea6ae6c0-5000-442b-a526-e39a22d74905`
 - [ ] **Project ID**: `_________________`
 - [ ] **Service Name**: `_________________`
 - [ ] **GitHub Secret Added**: `RAILWAY_TOKEN`
@@ -77,7 +77,7 @@
 - Org ID (from dashboard settings)
 
 ### Railway Information Needed:
-- Railway token (create in dashboard)
+- Railway token: ✅ `ea6ae6c0-5000-442b-a526-e39a22d74905`
 - Project ID (from `railway status`)
 - Service name (usually "backend" or project name)
 
@@ -98,4 +98,17 @@ cd backend && railway status
 # Test deployments
 cd frontend && vercel --prod
 cd backend && railway up
+```
+
+## 🔐 GitHub Secrets to Add
+
+Once you have all the information, add these secrets to your GitHub repository:
+
+```
+VERCEL_TOKEN=GfamdbHNRGMPY0BnTmP0zvoy
+VERCEL_ORG_ID=your_org_id_here
+VERCEL_PROJECT_ID=your_project_id_here
+RAILWAY_TOKEN=ea6ae6c0-5000-442b-a526-e39a22d74905
+RAILWAY_PROJECT_ID=your_project_id_here
+RAILWAY_SERVICE=your_service_name_here
 ``` 

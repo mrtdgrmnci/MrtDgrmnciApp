@@ -12,7 +12,7 @@ Add these secrets to your GitHub repository at: `https://github.com/mrtdgrmnci/M
 ### Railway (Backend) Secrets
 - **RAILWAY_TOKEN**: `ea6ae6c0-5000-442b-a526-e39a22d74905`
 - **RAILWAY_PROJECT_ID**: `199d2473-7533-4177-b2f8-3786d9c7f183`
-- **RAILWAY_SERVICE**: `backend` (will be created on first deploy)
+- **RAILWAY_SERVICE**: `mrtApp`
 
 ## How to Add Secrets
 
