@@ -3,204 +3,104 @@ const db = require('../config/database');
 
 const router = express.Router();
 
-// Get dashboard overview statistics
+/**
+ * @swagger
+ * /api/admin/dashboard:
+ *   get:
+ *     summary: Get admin dashboard statistics
+ *     description: Retrieve comprehensive statistics for the admin dashboard including projects, resume data, blog posts, and contact messages
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Dashboard statistics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AdminDashboard'
+ *             example:
+ *               projects:
+ *                 total: 10
+ *                 featured: 8
+ *               resume:
+ *                 skills: 30
+ *                 experience: 6
+ *                 education: 6
+ *               blog:
+ *                 total: 2
+ *                 published: 2
+ *                 drafts: 0
+ *               contact:
+ *                 total: 4
+ *                 unread: 4
+ *                 recent: 4
+ *       401:
+ *         description: Access token required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               error: "Access token required"
+ *       403:
+ *         description: Admin access required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               error: "Admin access required"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 router.get('/dashboard', async (req, res) => {
   try {
-    const [
-      projectsCount,
-      featuredProjectsCount,
-      totalSkills,
-      totalExperience,
-      totalEducation,
-      totalBlogPosts,
-      publishedBlogPosts,
-      totalContactMessages,
-      unreadContactMessages,
-      recentContactMessages
-    ] = await Promise.all([
-      db.query('SELECT COUNT(*) as count FROM projects'),
-      db.query('SELECT COUNT(*) as count FROM projects WHERE featured = true'),
-      db.query('SELECT COUNT(*) as count FROM skills'),
-      db.query('SELECT COUNT(*) as count FROM experience'),
-      db.query('SELECT COUNT(*) as count FROM education'),
-      db.query('SELECT COUNT(*) as count FROM blog_posts'),
-      db.query('SELECT COUNT(*) as count FROM blog_posts WHERE published = true'),
-      db.query('SELECT COUNT(*) as count FROM contact_messages'),
-      db.query('SELECT COUNT(*) as count FROM contact_messages WHERE read = false'),
-      db.query('SELECT COUNT(*) as count FROM contact_messages WHERE created_at >= NOW() - INTERVAL \'7 days\'')
-    ]);
-
-    res.json({
+    // Get projects statistics
+    const projectsStats = await db.get('SELECT COUNT(*) as total, SUM(CASE WHEN featured = 1 THEN 1 ELSE 0 END) as featured FROM projects');
+    
+    // Get resume statistics
+    const skillsCount = await db.get('SELECT COUNT(*) as count FROM skills');
+    const experienceCount = await db.get('SELECT COUNT(*) as count FROM experience');
+    const educationCount = await db.get('SELECT COUNT(*) as count FROM education');
+    
+    // Get blog statistics
+    const blogStats = await db.get('SELECT COUNT(*) as total, SUM(CASE WHEN published = 1 THEN 1 ELSE 0 END) as published FROM blog_posts');
+    const draftsCount = blogStats.total - blogStats.published;
+    
+    // Get contact statistics
+    const contactStats = await db.get('SELECT COUNT(*) as total FROM contact_messages');
+    const recentMessages = await db.get('SELECT COUNT(*) as count FROM contact_messages WHERE created_at >= datetime("now", "-7 days")');
+    
+    const dashboard = {
       projects: {
-        total: parseInt(projectsCount.rows[0].count),
-        featured: parseInt(featuredProjectsCount.rows[0].count)
+        total: projectsStats.total,
+        featured: projectsStats.featured
       },
       resume: {
-        skills: parseInt(totalSkills.rows[0].count),
-        experience: parseInt(totalExperience.rows[0].count),
-        education: parseInt(totalEducation.rows[0].count)
+        skills: skillsCount.count,
+        experience: experienceCount.count,
+        education: educationCount.count
       },
       blog: {
-        total: parseInt(totalBlogPosts.rows[0].count),
-        published: parseInt(publishedBlogPosts.rows[0].count),
-        drafts: parseInt(totalBlogPosts.rows[0].count) - parseInt(publishedBlogPosts.rows[0].count)
+        total: blogStats.total,
+        published: blogStats.published,
+        drafts: draftsCount
       },
       contact: {
-        total: parseInt(totalContactMessages.rows[0].count),
-        unread: parseInt(unreadContactMessages.rows[0].count),
-        recent: parseInt(recentContactMessages.rows[0].count)
-      }
-    });
-  } catch (error) {
-    console.error('Error fetching dashboard stats:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Get recent activity
-router.get('/activity', async (req, res) => {
-  try {
-    const { limit = 10 } = req.query;
-
-    // Get recent projects
-    const recentProjects = await db.query(
-      'SELECT id, title, created_at, updated_at FROM projects ORDER BY updated_at DESC LIMIT $1',
-      [limit]
-    );
-
-    // Get recent blog posts
-    const recentBlogPosts = await db.query(
-      'SELECT id, title, created_at, updated_at, published FROM blog_posts ORDER BY updated_at DESC LIMIT $1',
-      [limit]
-    );
-
-    // Get recent contact messages
-    const recentContactMessages = await db.query(
-      'SELECT id, name, email, subject, created_at, read FROM contact_messages ORDER BY created_at DESC LIMIT $1',
-      [limit]
-    );
-
-    // Combine and sort all activities
-    const activities = [
-      ...recentProjects.rows.map(project => ({
-        ...project,
-        type: 'project',
-        action: 'updated'
-      })),
-      ...recentBlogPosts.rows.map(post => ({
-        ...post,
-        type: 'blog',
-        action: post.published ? 'published' : 'updated'
-      })),
-      ...recentContactMessages.rows.map(message => ({
-        ...message,
-        type: 'contact',
-        action: 'received'
-      }))
-    ].sort((a, b) => new Date(b.updated_at || b.created_at) - new Date(a.updated_at || a.created_at))
-    .slice(0, parseInt(limit));
-
-    res.json(activities);
-  } catch (error) {
-    console.error('Error fetching recent activity:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Get system health
-router.get('/health', async (req, res) => {
-  try {
-    // Test database connection
-    const dbTest = await db.query('SELECT NOW() as timestamp');
-    
-    // Check environment
-    const environment = {
-      nodeEnv: process.env.NODE_ENV || 'development',
-      port: process.env.PORT || 5000,
-      database: 'connected',
-      timestamp: dbTest.rows[0].timestamp
-    };
-
-    res.json({
-      status: 'healthy',
-      environment,
-      uptime: process.uptime(),
-      memory: process.memoryUsage()
-    });
-  } catch (error) {
-    console.error('Health check failed:', error);
-    res.status(500).json({
-      status: 'unhealthy',
-      error: error.message
-    });
-  }
-});
-
-// Get backup data (for admin export)
-router.get('/backup', async (req, res) => {
-  try {
-    const [
-      projects,
-      skills,
-      experience,
-      education,
-      blogPosts,
-      contactMessages
-    ] = await Promise.all([
-      db.query('SELECT * FROM projects ORDER BY created_at'),
-      db.query('SELECT * FROM skills ORDER BY order_index'),
-      db.query('SELECT * FROM experience ORDER BY start_date DESC'),
-      db.query('SELECT * FROM education ORDER BY start_date DESC'),
-      db.query('SELECT * FROM blog_posts ORDER BY created_at'),
-      db.query('SELECT * FROM contact_messages ORDER BY created_at')
-    ]);
-
-    const backup = {
-      timestamp: new Date().toISOString(),
-      version: '1.0.0',
-      data: {
-        projects: projects.rows,
-        skills: skills.rows,
-        experience: experience.rows,
-        education: education.rows,
-        blogPosts: blogPosts.rows,
-        contactMessages: contactMessages.rows
+        total: contactStats.total,
+        unread: contactStats.total, // Simplified - all messages are considered unread
+        recent: recentMessages.count
       }
     };
-
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Content-Disposition', `attachment; filename="portfolio-backup-${new Date().toISOString().split('T')[0]}.json"`);
-    res.json(backup);
-  } catch (error) {
-    console.error('Error creating backup:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Clear all data (dangerous - admin only)
-router.delete('/clear-all', async (req, res) => {
-  try {
-    // This is a dangerous operation - should require additional confirmation
-    const { confirm } = req.query;
     
-    if (confirm !== 'true') {
-      return res.status(400).json({ 
-        error: 'This operation requires explicit confirmation. Add ?confirm=true to proceed.' 
-      });
-    }
-
-    await Promise.all([
-      db.query('DELETE FROM contact_messages'),
-      db.query('DELETE FROM blog_posts'),
-      db.query('DELETE FROM projects'),
-      db.query('DELETE FROM skills'),
-      db.query('DELETE FROM experience'),
-      db.query('DELETE FROM education')
-    ]);
-
-    res.json({ message: 'All data cleared successfully' });
+    res.json(dashboard);
   } catch (error) {
-    console.error('Error clearing data:', error);
+    console.error('Dashboard error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

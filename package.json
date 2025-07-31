@@ -1,7 +1,7 @@
 {
   "name": "mrt-portfolio",
   "version": "1.0.0",
-  "description": "Modern Personal Portfolio Website",
+  "description": "Minimalist Personal Portfolio Website",
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
@@ -9,10 +9,14 @@
     "client": "cd frontend && npm run dev",
     "build": "cd frontend && npm run build",
     "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
-    "test": "concurrently \"cd backend && npm test\" \"cd frontend && npm test\"",
-    "start": "cd backend && npm start"
+    "start": "cd backend && npm start",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm test",
+    "test:coverage": "cd backend && npm run test:coverage && cd ../frontend && npm run test:coverage",
+    "db:migrate": "cd backend && npm run db:migrate",
+    "db:seed": "cd backend && npm run db:seed"
   },
-  "keywords": ["portfolio", "react", "nodejs", "express", "postgresql"],
+  "keywords": ["portfolio", "react", "nodejs", "express", "sqlite", "minimalist", "testing", "security"],
   "author": "MRT",
   "license": "MIT",
   "devDependencies": {

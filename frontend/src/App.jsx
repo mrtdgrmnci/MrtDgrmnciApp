@@ -14,8 +14,8 @@ function App() {
   return (
     <>
       <Helmet>
-        <title>MRT - Portfolio</title>
-        <meta name="description" content="Personal portfolio website showcasing projects, skills, and experience" />
+        <title>Murat Degirmenci - QA Automation Advisor</title>
+        <meta name="description" content="QA Automation Advisor with 10+ years of experience in Selenium, Playwright, Rest Assured, JMeter, and Postman. Expert in test automation frameworks and quality assurance." />
       </Helmet>
       
       <Routes>

@@ -1,32 +1,28 @@
 import axios from 'axios'
 
-// Create axios instance
 const api = axios.create({
   baseURL: '/api',
   timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json' },
 })
 
-// Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
+    console.log('API Request:', config.method?.toUpperCase(), config.url)
     const token = localStorage.getItem('token')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
+    if (token) config.headers.Authorization = `Bearer ${token}`
     return config
   },
-  (error) => {
-    return Promise.reject(error)
-  }
+  (error) => Promise.reject(error)
 )
 
-// Response interceptor to handle errors
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log('API Response:', response.status, response.config.url, response.data)
+    return response
+  },
   (error) => {
+    console.error('API Error:', error.response?.status, error.config?.url, error.message)
     if (error.response?.status === 401) {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
@@ -36,85 +32,77 @@ api.interceptors.response.use(
   }
 )
 
-// Auth API
 export const authAPI = {
-  login: (credentials) => api.post('/auth/login', credentials),
-  verify: () => api.get('/auth/verify'),
   logout: () => api.post('/auth/logout'),
-  changePassword: (passwords) => api.post('/auth/change-password', passwords),
 }
 
-// Projects API
 export const projectsAPI = {
   getAll: async () => {
-    const response = await api.get('/projects')
-    console.log('API Response:', response)
-    console.log('API Response data:', response.data)
-    return response.data
+    console.log('Fetching projects...')
+    try {
+      const response = await api.get('/projects')
+      console.log('Projects response:', response.data)
+      return response.data
+    } catch (error) {
+      console.error('Error in projectsAPI.getAll:', error)
+      throw error
+    }
   },
-  getFeatured: () => api.get('/projects/featured'),
-  getById: (id) => api.get(`/projects/${id}`),
-  create: (project) => api.post('/projects', project),
-  update: (id, project) => api.put(`/projects/${id}`, project),
   delete: (id) => api.delete(`/projects/${id}`),
-  reorder: (projectOrders) => api.post('/projects/reorder', { projectOrders }),
 }
 
-// Resume API
 export const resumeAPI = {
-  getAll: () => api.get('/resume'),
-  getSkills: () => api.get('/resume/skills'),
-  getExperience: () => api.get('/resume/experience'),
-  getEducation: () => api.get('/resume/education'),
-  
-  // Skills
-  createSkill: (skill) => api.post('/resume/skills', skill),
-  updateSkill: (id, skill) => api.put(`/resume/skills/${id}`, skill),
-  deleteSkill: (id) => api.delete(`/resume/skills/${id}`),
-  
-  // Experience
-  createExperience: (experience) => api.post('/resume/experience', experience),
-  updateExperience: (id, experience) => api.put(`/resume/experience/${id}`, experience),
-  deleteExperience: (id) => api.delete(`/resume/experience/${id}`),
-  
-  // Education
-  createEducation: (education) => api.post('/resume/education', education),
-  updateEducation: (id, education) => api.put(`/resume/education/${id}`, education),
-  deleteEducation: (id) => api.delete(`/resume/education/${id}`),
+  getAll: async () => {
+    console.log('Fetching resume...')
+    try {
+      const response = await api.get('/resume')
+      console.log('Resume response:', response.data)
+      return response.data
+    } catch (error) {
+      console.error('Error in resumeAPI.getAll:', error)
+      throw error
+    }
+  },
 }
 
-// Blog API
 export const blogAPI = {
-  getAll: (params) => api.get('/blog', { params }),
-  getAdmin: () => api.get('/blog/admin'),
-  getBySlug: (slug) => api.get(`/blog/post/${slug}`),
-  getById: (id) => api.get(`/blog/${id}`),
-  getTags: () => api.get('/blog/tags/all'),
-  create: (post) => api.post('/blog', post),
-  update: (id, post) => api.put(`/blog/${id}`, post),
-  delete: (id) => api.delete(`/blog/${id}`),
-  getStats: () => api.get('/blog/stats/overview'),
+  getAll: async (params) => {
+    console.log('Fetching blog posts...', params)
+    try {
+      const response = await api.get('/blog', { params })
+      console.log('Blog response:', response.data)
+      return response.data
+    } catch (error) {
+      console.error('Error in blogAPI.getAll:', error)
+      throw error
+    }
+  },
+  getBySlug: async (slug) => {
+    console.log('Fetching blog post by slug:', slug)
+    try {
+      const response = await api.get(`/blog/post/${slug}`)
+      console.log('Blog post response:', response.data)
+      return response.data
+    } catch (error) {
+      console.error('Error in blogAPI.getBySlug:', error)
+      throw error
+    }
+  },
 }
 
-// Contact API
 export const contactAPI = {
   submit: (message) => api.post('/contact', message),
-  getAll: () => api.get('/contact'),
-  getUnread: () => api.get('/contact/unread'),
-  getById: (id) => api.get(`/contact/${id}`),
-  markAsRead: (id) => api.patch(`/contact/${id}/read`),
-  markAsUnread: (id) => api.patch(`/contact/${id}/unread`),
-  delete: (id) => api.delete(`/contact/${id}`),
-  getStats: () => api.get('/contact/stats/overview'),
+  getAll: async () => {
+    const response = await api.get('/contact')
+    return response.data
+  },
 }
 
-// Admin API
 export const adminAPI = {
-  getDashboard: () => api.get('/admin/dashboard'),
-  getActivity: (params) => api.get('/admin/activity', { params }),
-  getHealth: () => api.get('/admin/health'),
-  getBackup: () => api.get('/admin/backup'),
-  clearAll: (confirm) => api.delete(`/admin/clear-all?confirm=${confirm}`),
+  getDashboardStats: async () => {
+    const response = await api.get('/admin/dashboard')
+    return response.data
+  },
 }
 
 export default api 

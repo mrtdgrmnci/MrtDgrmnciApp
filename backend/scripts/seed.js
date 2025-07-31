@@ -4,285 +4,362 @@ const { run } = require('../config/database');
 
 const seedData = async () => {
   try {
-    console.log('🔄 Seeding database with sample data...');
+    console.log('🌱 Seeding database...');
 
-    // Create admin user
-    const hashedPassword = await bcrypt.hash('admin123', 10);
-    await run(`
-      INSERT OR IGNORE INTO users (username, email, password_hash, role)
-      VALUES (?, ?, ?, ?)
-    `, ['admin', 'admin@example.com', hashedPassword, 'admin']);
+    // Create default admin user
+    const hashedPassword = await bcrypt.hash('admin123', 12);
+    await run(
+      'INSERT OR IGNORE INTO users (email, password, role) VALUES (?, ?, ?)',
+      ['admin@example.com', hashedPassword, 'admin']
+    );
 
-    // Insert sample projects
+    // Sample projects data
     const projects = [
       {
-        title: 'Selenium Test Automation Framework',
-        description: 'A comprehensive test automation framework built with Selenium WebDriver, TestNG, and Java. Features include parallel execution, reporting, and cross-browser testing.',
-        technologies: JSON.stringify(['Selenium', 'Java', 'TestNG', 'Maven', 'Jenkins']),
-        image_url: 'https://via.placeholder.com/600x400/2563eb/ffffff?text=Selenium+Framework',
-        github_url: 'https://github.com/example/selenium-framework',
-        live_url: 'https://selenium-framework-demo.com',
-        featured: 1,
+        title: 'AI-Powered Test Automation Framework',
+        description: 'Advanced test automation framework integrating AI capabilities for intelligent test case generation, self-healing tests, and predictive analytics. Built with Selenium, Java, and machine learning components.',
+        technologies: JSON.stringify(['Selenium', 'Java', 'AI/ML', 'TestNG', 'Maven', 'Jenkins', 'Allure']),
+        image_url: 'https://via.placeholder.com/600x400/2563eb/ffffff?text=AI+Testing+Framework',
+        github_url: 'https://github.com/mrtdgrmnci/ai-testing-framework',
+        live_url: null,
+        featured: true,
         order_index: 1
       },
       {
-        title: 'Cypress E2E Testing Suite',
-        description: 'End-to-end testing suite for web applications using Cypress. Includes custom commands, fixtures, and comprehensive test coverage for critical user flows.',
-        technologies: JSON.stringify(['Cypress', 'JavaScript', 'Cucumber', 'GitHub Actions', 'Allure']),
-        image_url: 'https://via.placeholder.com/600x400/10b981/ffffff?text=Cypress+Suite',
-        github_url: 'https://github.com/example/cypress-suite',
-        live_url: 'https://cypress-suite-demo.com',
-        featured: 1,
+        title: 'Playwright E2E Testing Suite',
+        description: 'Modern end-to-end testing framework using Playwright with TypeScript. Includes API testing, visual regression testing, and comprehensive test coverage for web applications.',
+        technologies: JSON.stringify(['Playwright', 'TypeScript', 'API Testing', 'Visual Testing', 'GitHub Actions']),
+        image_url: 'https://via.placeholder.com/600x400/059669/ffffff?text=Playwright+Testing',
+        github_url: 'https://github.com/mrtdgrmnci/playwright-suite',
+        live_url: null,
+        featured: true,
         order_index: 2
       },
       {
-        title: 'Playwright API Testing Platform',
-        description: 'Modern API testing platform built with Playwright and TypeScript. Features include contract testing, performance monitoring, and automated reporting.',
-        technologies: JSON.stringify(['Playwright', 'TypeScript', 'REST API', 'Docker', 'Grafana']),
-        image_url: 'https://via.placeholder.com/600x400/f59e0b/ffffff?text=Playwright+API',
-        github_url: 'https://github.com/example/playwright-api',
-        live_url: 'https://playwright-api-demo.com',
-        featured: 0,
+        title: 'Rest Assured API Testing Framework',
+        description: 'Robust API testing framework built with Rest Assured and Karate. Features contract testing, data-driven testing, and integration with CI/CD pipelines.',
+        technologies: JSON.stringify(['Rest Assured', 'Karate', 'Java', 'API Testing', 'Contract Testing', 'Jenkins']),
+        image_url: 'https://via.placeholder.com/600x400/7c3aed/ffffff?text=API+Testing',
+        github_url: 'https://github.com/mrtdgrmnci/api-testing-framework',
+        live_url: null,
+        featured: true,
+        order_index: 3
+      },
+      {
+        title: 'JMeter Performance Testing Suite',
+        description: 'Load testing and performance monitoring framework using Apache JMeter. Includes distributed testing, real-time monitoring, and comprehensive performance reports.',
+        technologies: JSON.stringify(['JMeter', 'Java', 'Performance Testing', 'Load Testing', 'Grafana']),
+        image_url: 'https://via.placeholder.com/600x400/dc2626/ffffff?text=Performance+Testing',
+        github_url: 'https://github.com/mrtdgrmnci/performance-testing',
+        live_url: null,
+        featured: false,
+        order_index: 4
+      },
+      {
+        title: 'Cybersecurity Testing Framework',
+        description: 'Comprehensive security testing framework for government applications. Includes penetration testing automation, vulnerability assessment, and compliance testing for public and secret clearance requirements.',
+        technologies: JSON.stringify(['Security Testing', 'Penetration Testing', 'Java', 'Python', 'OWASP', 'NIST']),
+        image_url: 'https://via.placeholder.com/600x400/ef4444/ffffff?text=Security+Testing',
+        github_url: 'https://github.com/mrtdgrmnci/security-testing-framework',
+        live_url: null,
+        featured: true,
+        order_index: 5
+      }
+    ];
+
+    // Insert projects
+    for (const project of projects) {
+      await run(
+        'INSERT OR IGNORE INTO projects (title, description, technologies, image_url, github_url, live_url, featured, order_index) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [project.title, project.description, project.technologies, project.image_url, project.github_url, project.live_url, project.featured, project.order_index]
+      );
+    }
+
+    // Sample skills data
+    const skills = [
+      { name: 'Selenium WebDriver', proficiency: 95, category: 'automation', icon: 'fas fa-robot', order_index: 1 },
+      { name: 'Playwright', proficiency: 92, category: 'automation', icon: 'fas fa-play', order_index: 2 },
+      { name: 'Rest Assured', proficiency: 92, category: 'api-testing', icon: 'fas fa-api', order_index: 3 },
+      { name: 'Java', proficiency: 90, category: 'programming', icon: 'fab fa-java', order_index: 4 },
+      { name: 'Python', proficiency: 88, category: 'programming', icon: 'fab fa-python', order_index: 5 },
+      { name: 'Postman', proficiency: 90, category: 'api-testing', icon: 'fas fa-envelope', order_index: 6 },
+      { name: 'Karate Framework', proficiency: 87, category: 'api-testing', icon: 'fas fa-fist-raised', order_index: 7 },
+      { name: 'AI Testing', proficiency: 85, category: 'emerging-tech', icon: 'fas fa-brain', order_index: 8 },
+      { name: 'Test Management', proficiency: 90, category: 'management', icon: 'fas fa-tasks', order_index: 9 },
+      { name: 'JMeter', proficiency: 88, category: 'performance', icon: 'fas fa-tachometer-alt', order_index: 10 },
+      { name: 'Jenkins', proficiency: 85, category: 'ci-cd', icon: 'fab fa-jenkins', order_index: 11 },
+      { name: 'TestNG', proficiency: 88, category: 'automation', icon: 'fas fa-vial', order_index: 12 },
+      { name: 'Git', proficiency: 90, category: 'version-control', icon: 'fab fa-git-alt', order_index: 13 },
+      { name: 'Docker', proficiency: 80, category: 'devops', icon: 'fab fa-docker', order_index: 14 },
+      { name: 'Cybersecurity Testing', proficiency: 80, category: 'security', icon: 'fas fa-shield-alt', order_index: 15 }
+    ];
+
+    // Insert skills
+    for (const skill of skills) {
+      await run(
+        'INSERT OR IGNORE INTO skills (name, proficiency, category, icon, order_index) VALUES (?, ?, ?, ?, ?)',
+        [skill.name, skill.proficiency, skill.category, skill.icon, skill.order_index]
+      );
+    }
+
+    // Sample experience data
+    const experience = [
+      {
+        title: 'QA Automation Advisor',
+        company: 'General Dynamics',
+        location: 'Washington, DC',
+        start_date: '2022-01',
+        end_date: null,
+        current: true,
+        description: 'Lead test management and QA advisory initiatives with focus on AI testing integration. Implement comprehensive test automation frameworks using Selenium, Playwright, and Rest Assured. Mentor QA teams and establish best practices for AI-powered testing solutions.',
+        technologies: JSON.stringify(['Selenium', 'Playwright', 'Rest Assured', 'Java', 'JMeter', 'Postman', 'Karate', 'AI Testing', 'Test Management']),
+        order_index: 1
+      },
+      {
+        title: 'Senior QA Automation Engineer',
+        company: 'Capital One',
+        location: 'McLean, VA',
+        start_date: '2019-03',
+        end_date: '2021-12',
+        current: false,
+        description: 'Developed and maintained automated test suites for financial applications. Implemented API testing frameworks using Rest Assured and Postman. Collaborated with development teams to ensure high-quality software delivery.',
+        technologies: JSON.stringify(['Selenium', 'Rest Assured', 'TestNG', 'Java', 'Jenkins', 'Postman']),
+        order_index: 2
+      },
+      {
+        title: 'QA Engineer',
+        company: 'UnitedHealth Group',
+        location: 'Minneapolis, MN',
+        start_date: '2017-06',
+        end_date: '2019-02',
+        current: false,
+        description: 'Performed manual and automated testing for healthcare applications. Built initial automation frameworks using Selenium WebDriver and Java. Established testing processes and procedures.',
+        technologies: JSON.stringify(['Selenium', 'Java', 'JUnit', 'Manual Testing', 'Test Planning']),
         order_index: 3
       }
     ];
 
-    for (const project of projects) {
-      await run(`
-        INSERT OR IGNORE INTO projects (title, description, technologies, image_url, github_url, live_url, featured, order_index)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-      `, [project.title, project.description, project.technologies, project.image_url, project.github_url, project.live_url, project.featured, project.order_index]);
-    }
-
-    // Insert sample skills
-    const skills = [
-      { name: 'Selenium', proficiency: 90, category: 'automation', icon: 'fas fa-robot', order_index: 1 },
-      { name: 'Cypress', proficiency: 85, category: 'automation', icon: 'fas fa-cypress', order_index: 2 },
-      { name: 'Playwright', proficiency: 80, category: 'automation', icon: 'fas fa-playwright', order_index: 3 },
-      { name: 'Python', proficiency: 75, category: 'programming', icon: 'fab fa-python', order_index: 4 },
-      { name: 'JavaScript', proficiency: 70, category: 'programming', icon: 'fab fa-js-square', order_index: 5 },
-      { name: 'Jenkins', proficiency: 65, category: 'ci-cd', icon: 'fab fa-jenkins', order_index: 6 },
-      { name: 'Docker', proficiency: 60, category: 'devops', icon: 'fab fa-docker', order_index: 7 },
-      { name: 'Git', proficiency: 85, category: 'tools', icon: 'fab fa-git-alt', order_index: 8 }
-    ];
-
-    for (const skill of skills) {
-      await run(`
-        INSERT OR IGNORE INTO skills (name, proficiency, category, icon, order_index)
-        VALUES (?, ?, ?, ?, ?)
-      `, [skill.name, skill.proficiency, skill.category, skill.icon, skill.order_index]);
-    }
-
-    // Insert sample experience
-    const experience = [
-      {
-        title: 'Senior Test Automation Advisor',
-        company: 'Tech Solutions Inc.',
-        location: 'San Francisco, CA',
-        start_date: '2022-01',
-        end_date: null,
-        current: 1,
-        description: 'Lead test automation initiatives and framework development using Selenium, Cypress, and Playwright. Mentored QA teams and implemented best practices.',
-        technologies: JSON.stringify(['Selenium', 'Cypress', 'Playwright', 'Python', 'JavaScript']),
-        order_index: 1
-      },
-      {
-        title: 'QA Automation Engineer',
-        company: 'Digital Agency XYZ',
-        location: 'New York, NY',
-        start_date: '2020-03',
-        end_date: '2021-12',
-        current: 0,
-        description: 'Developed automated test suites and quality assurance processes. Collaborated with development teams to ensure product quality.',
-        technologies: JSON.stringify(['Selenium', 'JUnit', 'TestNG', 'Java', 'Jenkins']),
-        order_index: 2
-      }
-    ];
-
+    // Insert experience
     for (const exp of experience) {
-      await run(`
-        INSERT OR IGNORE INTO experience (title, company, location, start_date, end_date, current, description, technologies, order_index)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `, [exp.title, exp.company, exp.location, exp.start_date, exp.end_date, exp.current, exp.description, exp.technologies, exp.order_index]);
+      await run(
+        'INSERT OR IGNORE INTO experience (title, company, location, start_date, end_date, current, description, technologies, order_index) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [exp.title, exp.company, exp.location, exp.start_date, exp.end_date, exp.current, exp.description, exp.technologies, exp.order_index]
+      );
     }
 
-    // Insert sample education
+    // Sample education data
     const education = [
       {
-        degree: 'Bachelor of Science in Computer Science',
-        institution: 'University of Technology',
-        location: 'Boston, MA',
-        start_date: '2016-09',
-        end_date: '2020-05',
-        current: 0,
-        description: 'Focused on software engineering, algorithms, and web development. Graduated with honors.',
+        degree: 'Master of Science in Software Engineering',
+        institution: 'University of Minnesota',
+        location: 'Minneapolis, MN',
+        start_date: '2015-09',
+        end_date: '2017-05',
+        current: false,
+        description: 'Specialized in software testing methodologies, quality assurance, and test automation frameworks. Completed thesis on "Automated Testing Strategies for Enterprise Applications."',
         gpa: '3.8/4.0',
         order_index: 1
+      },
+      {
+        degree: 'Bachelor of Science in Computer Science',
+        institution: 'Istanbul Technical University',
+        location: 'Istanbul, Turkey',
+        start_date: '2011-09',
+        end_date: '2015-06',
+        current: false,
+        description: 'Focused on software development, algorithms, and data structures. Completed capstone project on "Automated Testing Framework for Web Applications."',
+        gpa: '3.6/4.0',
+        order_index: 2
+      },
+      {
+        degree: 'ISTQB Certified Tester',
+        institution: 'International Software Testing Qualifications Board',
+        location: 'Online',
+        start_date: '2018-03',
+        end_date: '2018-03',
+        current: false,
+        description: 'Certified Tester Foundation Level (CTFL) - International standard for software testing qualifications.',
+        gpa: null,
+        order_index: 3
       }
     ];
 
+    // Insert education
     for (const edu of education) {
-      await run(`
-        INSERT OR IGNORE INTO education (degree, institution, location, start_date, end_date, current, description, gpa, order_index)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `, [edu.degree, edu.institution, edu.location, edu.start_date, edu.end_date, edu.current, edu.description, edu.gpa, edu.order_index]);
+      await run(
+        'INSERT OR IGNORE INTO education (degree, institution, location, start_date, end_date, current, description, gpa, order_index) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [edu.degree, edu.institution, edu.location, edu.start_date, edu.end_date, edu.current, edu.description, edu.gpa, edu.order_index]
+      );
     }
 
-    // Insert sample blog posts
+    // Sample blog posts data
     const blogPosts = [
       {
-        title: 'Getting Started with React Hooks',
-        slug: 'getting-started-with-react-hooks',
-        excerpt: 'Learn how to use React Hooks to write cleaner, more functional components.',
-        content: `# Getting Started with React Hooks
+        title: 'AI-Powered Test Automation: The Future of Quality Assurance',
+        slug: 'ai-powered-test-automation-future-qa',
+        excerpt: 'Explore how artificial intelligence is revolutionizing test automation with intelligent test case generation, self-healing tests, and predictive analytics.',
+        content: `# AI-Powered Test Automation: The Future of Quality Assurance
 
-React Hooks were introduced in React 16.8 and have revolutionized how we write React components. They allow you to use state and other React features without writing a class.
+Artificial Intelligence is revolutionizing the way we approach test automation. In this comprehensive guide, I'll share insights from implementing AI-powered testing solutions in enterprise environments.
 
-## What are Hooks?
+## The AI Testing Revolution
 
-Hooks are functions that let you "hook into" React state and lifecycle features from function components. They don't work inside classes — they let you use React without classes.
+AI-powered test automation offers several transformative capabilities:
 
-## Basic Hooks
+### 1. Intelligent Test Case Generation
 
-### useState
-
-The useState Hook lets you add state to function components:
-
-\`\`\`jsx
-import React, { useState } from 'react';
-
-function Example() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div>
-      <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
-    </div>
-  );
+\`\`\`java
+public class AITestGenerator {
+    private final MachineLearningModel mlModel;
+    
+    public List<TestCase> generateTestCases(ApplicationModel model) {
+        return mlModel
+            .analyzeApplication(model)
+            .generateTestScenarios()
+            .prioritizeByRisk()
+            .createTestCases();
+    }
 }
 \`\`\`
 
-### useEffect
+### 2. Self-Healing Test Automation
 
-The useEffect Hook lets you perform side effects in function components:
+AI algorithms can automatically detect UI changes and update selectors without human intervention, significantly reducing maintenance overhead.
 
-\`\`\`jsx
-import React, { useState, useEffect } from 'react';
+### 3. Predictive Analytics
 
-function Example() {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    document.title = \`You clicked \${count} times\`;
-  });
-
-  return (
-    <div>
-      <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
-    </div>
-  );
+\`\`\`java
+public class TestAnalyticsService {
+    public TestPrediction predictTestOutcome(TestContext context) {
+        return mlModel.predict({
+            historicalData: context.getHistoricalResults(),
+            codeChanges: context.getRecentChanges(),
+            testComplexity: context.getTestComplexity()
+        });
+    }
 }
 \`\`\`
+
+## AI Testing Framework Architecture
+
+The framework consists of several key components:
+- **Natural Language Processing**: Convert requirements to test cases
+- **Computer Vision**: Visual regression testing with AI
+- **Predictive Models**: Identify high-risk areas for testing
+
+### Benefits of AI Testing
+
+1. **Reduced Maintenance**: Self-healing tests reduce maintenance overhead
+2. **Improved Coverage**: AI identifies edge cases humans might miss
+3. **Faster Execution**: Parallel execution with intelligent prioritization
+4. **Better ROI**: Higher test effectiveness with lower effort
+
+## Implementation Strategy
+
+Start with a pilot project focusing on:
+- Stable, well-documented applications
+- High-value, frequently changing features
+- Clear success metrics and KPIs
 
 ## Conclusion
 
-Hooks make React components more readable and easier to test. They eliminate the need for complex class components and provide a more intuitive way to manage state and side effects.`,
-        tags: JSON.stringify(['React', 'JavaScript', 'Web Development']),
-        published: 1,
+AI-powered test automation represents the future of quality assurance. Organizations that embrace this technology will gain significant competitive advantages in terms of speed, quality, and cost-effectiveness.`,
+        tags: JSON.stringify(['AI Testing', 'Automation', 'Quality Assurance', 'Machine Learning']),
+        published: true,
         published_at: new Date().toISOString()
       },
       {
-        title: 'Building RESTful APIs with Node.js and Express',
-        slug: 'building-restful-apis-nodejs-express',
-        excerpt: 'A comprehensive guide to building scalable RESTful APIs using Node.js and Express framework.',
-        content: `# Building RESTful APIs with Node.js and Express
+        title: 'Building Robust API Testing Frameworks with Rest Assured',
+        slug: 'building-robust-api-testing-frameworks-rest-assured',
+        excerpt: 'Learn how to build comprehensive API testing frameworks using Rest Assured, including best practices for contract testing and data-driven testing.',
+        content: `# Building Robust API Testing Frameworks with Rest Assured
 
-Node.js and Express.js provide a powerful combination for building RESTful APIs. In this guide, we'll explore best practices and patterns for creating scalable APIs.
+API testing is a critical component of modern software development. In this guide, I'll share best practices for building robust API testing frameworks using Rest Assured.
 
-## Setting Up the Project
+## Framework Architecture
 
-First, initialize your Node.js project:
+A well-structured API testing framework should include:
 
-\`\`\`bash
-npm init -y
-npm install express cors helmet morgan
+### 1. Base Configuration
+
+\`\`\`java
+@Configuration
+public class ApiTestConfig {
+    @Value("\${api.base.url}")
+    private String baseUrl;
+    
+    @Bean
+    public RequestSpecification requestSpec() {
+        return new RequestSpecBuilder()
+            .setBaseUri(baseUrl)
+            .setContentType(ContentType.JSON)
+            .addHeader("Authorization", "Bearer " + getAuthToken())
+            .build();
+    }
+}
 \`\`\`
 
-## Basic Express Server
+### 2. Test Data Management
 
-\`\`\`javascript
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
+Implement data-driven testing with external data sources:
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Middleware
-app.use(helmet());
-app.use(cors());
-app.use(morgan('combined'));
-app.use(express.json());
-
-// Routes
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to the API' });
-});
-
-app.listen(PORT, () => {
-  console.log(\`Server running on port \${PORT}\`);
-});
+\`\`\`java
+@DataProvider(name = "userData")
+public Object[][] getUserData() {
+    return new Object[][] {
+        {"admin", "admin123", 200},
+        {"user", "user123", 200},
+        {"invalid", "wrong", 401}
+    };
+}
 \`\`\`
 
-## RESTful Routes
+### 3. Response Validation
 
-Follow REST conventions for your API endpoints:
+Use Rest Assured's powerful validation capabilities:
 
-- GET /api/users - Get all users
-- GET /api/users/:id - Get specific user
-- POST /api/users - Create new user
-- PUT /api/users/:id - Update user
-- DELETE /api/users/:id - Delete user
-
-## Error Handling
-
-Implement proper error handling:
-
-\`\`\`javascript
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
-});
+\`\`\`java
+@Test
+public void testUserCreation() {
+    given()
+        .spec(requestSpec())
+        .body(userData)
+    .when()
+        .post("/users")
+    .then()
+        .statusCode(201)
+        .body("id", notNullValue())
+        .body("email", equalTo(userData.getEmail()))
+        .header("Location", containsString("/users/"));
+}
 \`\`\`
+
+## Best Practices
+
+1. **Contract Testing**: Ensure API contracts are validated
+2. **Error Handling**: Test various error scenarios
+3. **Performance**: Include response time validations
+4. **Security**: Test authentication and authorization
 
 ## Conclusion
 
-Building RESTful APIs with Node.js and Express is straightforward and powerful. Follow these patterns for maintainable and scalable APIs.`,
-        tags: JSON.stringify(['Node.js', 'Express', 'API', 'Backend']),
-        published: 1,
+A well-designed API testing framework with Rest Assured provides comprehensive coverage and reliable validation of your APIs.`,
+        tags: JSON.stringify(['API Testing', 'Rest Assured', 'Java', 'Automation']),
+        published: true,
         published_at: new Date().toISOString()
       }
     ];
 
+    // Insert blog posts
     for (const post of blogPosts) {
-      await run(`
-        INSERT OR IGNORE INTO blog_posts (title, slug, excerpt, content, tags, published, published_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `, [post.title, post.slug, post.excerpt, post.content, post.tags, post.published, post.published_at]);
+      await run(
+        'INSERT OR IGNORE INTO blog_posts (title, slug, excerpt, content, tags, published, published_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [post.title, post.slug, post.excerpt, post.content, post.tags, post.published, post.published_at]
+      );
     }
 
     console.log('✅ Database seeded successfully!');
-    console.log('\n📝 Default admin credentials:');
-    console.log('Username: admin');
-    console.log('Password: admin123');
-    console.log('\n🌐 You can now start the development server with: npm run dev');
+    console.log('🔑 Default admin credentials: admin@example.com / admin123');
   } catch (error) {
     console.error('❌ Error seeding database:', error);
     process.exit(1);
